@@ -64,24 +64,35 @@ class PingServer(object):
         Set up ping server.
 
         - Take an endpoint object (i.e: itself in the network space)
-            - Used as a "from address" when sending packets.
+            - Used as a "from address" when sending packets
         - Load private key for server
         """
         self.endpoint = my_endpoint
 
+        # Load and serialize private key
         private_key_file = open('private_key', 'r')
         private_key_serialized = private_key_file.read()
         private_key_file.close()
 
+        # Ethereum uses secp256k1, an elliptic curve, for assymetric encryption
         self.private_key = PrivateKey()
         self.private_key.deserialize(private_key_serialized)
 
     def wrap_packet(self, packet):
+        """
+        Encode the packet.
+
+        hash || signature || packet-type || packet-data
+        """
+        # Append the packet type to the RLP encoding of the packet data
         payload = packet.packet_type + rlp.encode(packet.pack())
+        # Sign the hashed payload, use raw=True, cause we've already hashed,
+        # and otherwise, the function would use its own hash function
         signature = self.private_key.ecdsa_sign_recoverable(
             keccak256(payload),
             raw=True,
         )
+        # Creates a tuple
         signature_serialized = self.private_key.ecdsa_recoverable_serialize(signature)
         payload = signature_serialized[0] + chr(signature_serialized[1] + payload)
 
@@ -97,7 +108,7 @@ class PingServer(object):
             data, addr = sock.recvfrom(1024)
             print 'received message[{}]'.format(addr)
 
-        return threading.Thread(target=receive_ping)
+        return threading.Thread(target=receivpe_ping)
 
     def ping(self, endpoint):
         sock = socket.socket(socket.AF_INET), socket.SOCK_DGRAM
