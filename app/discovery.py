@@ -33,3 +33,24 @@ class EndPoint(object):
             struct.pack(">H", self.udp_port),
             struct.pack(">H", self.tcp_port),
         ]
+
+
+class PingNode(object):
+    """Ping node class."""
+
+    PACKET_TYPE = '\x01';
+    VERSION = '\x03';
+
+    def __init__(self, endpoint_from, endpoint_to):
+        """Initialize ping node class."""
+        self.endpoint_from = endpoint_from
+        self.endpoint_to = endpoint_to
+
+    def pack(self):
+        """Prepare the object for encoding."""
+        return [
+            self.VERSION,
+            self.endpoint_from.pack(),
+            self.endpoint_to.pack,
+            struct.pack(">I", time.time() + 60),
+        ]
