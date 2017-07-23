@@ -1,6 +1,6 @@
 ./.Python
 venv/
 pyeth/
-.DS_Store
+*.DS_Store
 private_key
 *.pyc

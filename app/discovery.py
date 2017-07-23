@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import socket
 import threading
 import time
@@ -38,8 +40,8 @@ class EndPoint(object):
 class PingNode(object):
     """Ping node class."""
 
-    PACKET_TYPE = '\x01';
-    VERSION = '\x03';
+    packet_type = '\x01';
+    version = '\x03';
 
     def __init__(self, endpoint_from, endpoint_to):
         """Initialize ping node class."""
@@ -49,7 +51,7 @@ class PingNode(object):
     def pack(self):
         """Prepare the object for encoding."""
         return [
-            self.VERSION,
+            self.version,
             self.endpoint_from.pack(),
             self.endpoint_to.pack,
             struct.pack(">I", time.time() + 60),
