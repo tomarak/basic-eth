@@ -40,8 +40,8 @@ class EndPoint(object):
 class PingNode(object):
     """Ping node class."""
 
-    packet_type = '\x01';
-    version = '\x03';
+    packet_type = '\x01'
+    version = '\x03'
 
     def __init__(self, endpoint_from, endpoint_to):
         """Initialize ping node class."""
