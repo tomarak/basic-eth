@@ -2,4 +2,4 @@
 venv/
 pyeth/
 .DS_STORE
-
+private_key
