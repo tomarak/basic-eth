@@ -14,6 +14,8 @@ class EndPoint(object):
         self.tcpPort = tcpPort
 
     def pack(self):
-        return [self.address.packed,
-        struct.pack(">H", self.udpPort),
-        struct.pack(">H", self.tcpPort)]
+        return [
+            self.address.packed,
+            struct.pack(">H", self.udpPort),
+            struct.pack(">H", self.tcpPort),
+        ]
