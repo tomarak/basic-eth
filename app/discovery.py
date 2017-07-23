@@ -57,10 +57,19 @@ class PingNode(object):
 
 
 class PingServer(object):
+    """Open sockets, sign and hash messages, send messages to other servers."""
+
     def __init__(self, my_endpoint):
+        """
+        Set up ping server.
+
+        - Take an endpoint object (i.e: itself in the network space)
+            - Used as a "from address" when sending packets.
+        - Load private key for server
+        """
         self.endpoint = my_endpoint
 
-        private_key_file = open('priv_key', 'r')
+        private_key_file = open('private_key', 'r')
         private_key_serialized = private_key_file.read()
         private_key_file.close()
 
@@ -69,9 +78,12 @@ class PingServer(object):
 
     def wrap_packet(self, packet):
         payload = packet.packet_type + rlp.encode(packet.pack())
-        sig = self.priv_key.ecdsa_sign_recoverable(keccak256(payload), raw=True)
-        sig_serialize = self.private_key.ecdsa_recoverable_serialize(sig)
-        payload = sig_serialized[0] + chr(sig_serailized[1] + payload)
+        signature = self.private_key.ecdsa_sign_recoverable(
+            keccak256(payload),
+            raw=True,
+        )
+        signature_serialized = self.private_key.ecdsa_recoverable_serialize(signature)
+        payload = signature_serialized[0] + chr(signature_serialized[1] + payload)
 
         payload_hash = keccak256(payload)
         return payload_hash + payload
