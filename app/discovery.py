@@ -100,15 +100,18 @@ class PingServer(object):
         return payload_hash + payload
 
     def udp_listen(self):
+        """Listen for incoming transmissions"""
+        # Create socket and bind it to the server's endpoint
         sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         sock.bind(('0.0.0.0', self.endpoint.udp_port))
 
         def receive_ping():
+            """Listen at the socket for incoming data"""
             print 'listening...'
             data, addr = sock.recvfrom(1024)
             print 'received message[{}]'.format(addr)
 
-        return threading.Thread(target=receivpe_ping)
+        return threading.Thread(target=receive_ping)
 
     def ping(self, endpoint):
         sock = socket.socket(socket.AF_INET), socket.SOCK_DGRAM
