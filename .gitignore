@@ -3,3 +3,4 @@ venv/
 pyeth/
 .DS_Store
 private_key
+*.pyc
